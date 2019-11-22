@@ -17,13 +17,17 @@ buildscript {
         coreVersion = '1.2.0-alpha02'
         appcompatVersion = '1.1.0-beta01'
         constraintLayoutVersion = '1.1.3'
-        baseAdapterVersion = '2.9.45-androidx'
         recyclerviewVersion = '1.1.0'
         swiperefreshVersion = '1.0.0'
         testExtVersion = '1.1.0'
         runnerVersion = '1.1.1'
         espressoVersion = '3.1.1'
-
+        retrofitVersion = '2.3.0'
+        rxjavaVersion = '2.1.3'
+        rxadpterVersion = '1.0.0'
+        rxbindingVersion = '2.1.1'
+        gsonVersion = '2.8.5'
+        gsonCovertVersion = '2.3.0'
 
     }
     repositories {

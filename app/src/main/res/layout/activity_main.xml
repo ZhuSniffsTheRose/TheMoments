@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:id="@+id/momens_root_view"
     tools:context=".MainActivity">
 
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
@@ -15,5 +16,12 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
+
+    <View
+        android:id="@+id/test"
+        android:layout_width="match_parent"
+        android:layout_height="20dp"
+        android:background="@android:color/holo_blue_dark"/>
 
 </FrameLayout>
