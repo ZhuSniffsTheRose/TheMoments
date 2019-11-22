@@ -5,10 +5,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.thoughtworks.themoments.adapters.MomentsAdapter
-import com.thoughtworks.themoments.bean.MomentsData
-import com.thoughtworks.themoments.bean.TYPE_MOMENTS_CONTENT
-import com.thoughtworks.themoments.bean.TYPE_MOMENTS_CONTENT_PIC
-import com.thoughtworks.themoments.bean.TYPE_MOMENTS_PIC
+import com.thoughtworks.themoments.bean.*
 import com.thoughtworks.themoments.network.ApiManger
 import com.thoughtworks.themoments.network.MomentsApiInterface
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -54,7 +51,7 @@ class MainActivity : AppCompatActivity() {
     private fun formatData(t: MutableList<MomentsData>): MutableList<MomentsData> {
         val momentsDataFormatted = mutableListOf<MomentsData>()
         for (data in t) {
-            var viewType = -1
+            var viewType = TYPE_MOMENTS_INVALID
 
             val isContentExist = data.content?.isNotEmpty() ?: false
             val isImageExist = data.images?.isNotEmpty() ?: false
@@ -68,7 +65,9 @@ class MainActivity : AppCompatActivity() {
                     TYPE_MOMENTS_CONTENT_PIC // 文字和图片
             }
             data.viewType = viewType
-            momentsDataFormatted.add(data)
+            if (viewType != TYPE_MOMENTS_INVALID) {
+                momentsDataFormatted.add(data)
+            }
         }
         return momentsDataFormatted
     }

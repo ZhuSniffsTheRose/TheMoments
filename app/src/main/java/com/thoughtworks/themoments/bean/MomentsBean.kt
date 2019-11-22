@@ -6,6 +6,8 @@ import com.google.gson.annotations.SerializedName
 /**
  * Created by Zhu on 2019-11-22
  */
+
+const val TYPE_MOMENTS_INVALID = 0xFF00
 const val TYPE_MOMENTS_CONTENT_PIC = 0xFF01
 const val TYPE_MOMENTS_CONTENT = 0xFF02
 const val TYPE_MOMENTS_PIC = 0xFF03
