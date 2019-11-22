@@ -6,6 +6,9 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.thoughtworks.themoments.adapters.MomentsAdapter
 import com.thoughtworks.themoments.bean.MomentsData
+import com.thoughtworks.themoments.bean.TYPE_MOMENTS_CONTENT
+import com.thoughtworks.themoments.bean.TYPE_MOMENTS_CONTENT_PIC
+import com.thoughtworks.themoments.bean.TYPE_MOMENTS_PIC
 import com.thoughtworks.themoments.network.ApiManger
 import com.thoughtworks.themoments.network.MomentsApiInterface
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -32,7 +35,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun requestMoments() {
         val onNext = { t: MutableList<MomentsData> ->
-            mMomentsAdapter.updateNewsList(t)
+            mMomentsAdapter.updateNewsList(formatData(t))
             Toast.makeText(this, t.size, Toast.LENGTH_LONG).show()
         }
 
@@ -46,6 +49,28 @@ class MainActivity : AppCompatActivity() {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(onNext, onError)
         )
+    }
+
+    private fun formatData(t: MutableList<MomentsData>): MutableList<MomentsData> {
+        val momentsDataFormatted = mutableListOf<MomentsData>()
+        for (data in t) {
+            var viewType = -1
+
+            val isContentExist = data.content?.isNotEmpty() ?: false
+            val isImageExist = data.images?.isNotEmpty() ?: false
+
+            when {
+                isContentExist && !isImageExist -> viewType =
+                    TYPE_MOMENTS_CONTENT  // 仅展示文字
+                !isContentExist && isImageExist -> viewType =
+                    TYPE_MOMENTS_PIC  // 仅展示图片
+                isContentExist && isImageExist -> viewType =
+                    TYPE_MOMENTS_CONTENT_PIC // 文字和图片
+            }
+            data.viewType = viewType
+            momentsDataFormatted.add(data)
+        }
+        return momentsDataFormatted
     }
 
     private fun initRv() {

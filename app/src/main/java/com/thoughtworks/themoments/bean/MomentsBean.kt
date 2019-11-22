@@ -6,14 +6,24 @@ import com.google.gson.annotations.SerializedName
 /**
  * Created by Zhu on 2019-11-22
  */
+const val TYPE_MOMENTS_CONTENT_PIC = 0xFF01
+const val TYPE_MOMENTS_CONTENT = 0xFF02
+const val TYPE_MOMENTS_PIC = 0xFF03
+
 data class MomentsData(
-    val comments: List<Any>,
-    val content: String,
-    val error: String,
-    val images: List<ImageBean>,
-    val sender: SenderBean,
+    val comments: List<CommentBean>?,
+    val content: String?,
+    val error: String?,
+    val images: List<ImageBean>?,
+    val sender: SenderBean?,
     @SerializedName("unknown error")
-    val unknownError: String
+    val unknownError: String?,
+    var viewType: Int
+)
+
+data class CommentBean(
+    val content: String,
+    val sender: SenderBean
 )
 
 data class SenderBean(
