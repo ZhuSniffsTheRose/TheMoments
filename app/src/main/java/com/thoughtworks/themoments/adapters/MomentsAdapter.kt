@@ -4,6 +4,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
+import com.bumptech.glide.request.RequestOptions
 import com.thoughtworks.themoments.R
 import com.thoughtworks.themoments.bean.MomentsData
 import com.thoughtworks.themoments.bean.TYPE_MOMENTS_CONTENT
@@ -43,6 +45,14 @@ class MomentsAdapter(var moments: MutableList<MomentsData> = arrayListOf()) :
             TYPE_MOMENTS_CONTENT -> holder.itemView.let {
                 it.txt_user_name.text = moments[position].sender!!.nick
                 it.txt_content.text = moments[position].content
+                Glide.with(it.context)
+                    .asDrawable().load(moments[position].sender!!.avatar)
+                    .apply(
+                        RequestOptions.centerCropTransform()
+                            .skipMemoryCache(true)
+                            .placeholder(R.drawable.ic_launcher_background)
+                    )
+                    .into(it.img_avatar)
             }
 
 

@@ -28,6 +28,7 @@ buildscript {
         rxbindingVersion = '2.1.1'
         gsonVersion = '2.8.5'
         gsonCovertVersion = '2.3.0'
+        glideVersion = '4.6.1'
 
     }
     repositories {

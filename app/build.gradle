@@ -47,4 +47,6 @@ dependencies {
     implementation "com.google.code.gson:gson:$rootProject.gsonVersion"
     implementation "com.squareup.retrofit2:converter-gson:$rootProject.gsonCovertVersion"
 
+    implementation "com.github.bumptech.glide:glide:$rootProject.glideVersion"
+
 }
