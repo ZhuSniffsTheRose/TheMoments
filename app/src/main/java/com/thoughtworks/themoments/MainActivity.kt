@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.thoughtworks.themoments.adapters.MomentsAdapter
 import com.thoughtworks.themoments.bean.*
 import com.thoughtworks.themoments.network.ApiManger
@@ -17,7 +18,11 @@ import kotlinx.android.synthetic.main.activity_main.*
 /**
  * Todo: 将非View层相关的代码整理至其他层， 比如数据请求及处理应在 Presenter 中.
  */
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), SwipeRefreshLayout.OnRefreshListener {
+
+    override fun onRefresh() {
+        requestMoments()
+    }
 
     private val mDisposableList = mutableListOf<Disposable>()
 
@@ -29,10 +34,10 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         initRv()
-        test.setOnClickListener {
-            requestMoments()
-        }
+        showOrHideSwipeRefreshLayout(true)
+        swpie_refresh_layout.setOnRefreshListener(this)
     }
+
 
     private fun requestMoments() {
         val onNext = { t: MutableList<MomentsData> ->
@@ -48,8 +53,16 @@ class MainActivity : AppCompatActivity() {
             ApiManger.getApiService(MomentsApiInterface::class.java).fetchMomentsBean()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
+                .doFinally { showOrHideSwipeRefreshLayout(false) }
                 .subscribe(onNext, onError)
         )
+    }
+
+    private fun showOrHideSwipeRefreshLayout(show: Boolean) {
+        if (show) {
+            requestMoments()
+        }
+        swpie_refresh_layout.isRefreshing = show
     }
 
     private fun formatData(t: MutableList<MomentsData>): MutableList<MomentsData> {
@@ -92,9 +105,10 @@ class MainActivity : AppCompatActivity() {
 
     fun calculateShowCheckAllText(content: String?): Boolean {
         val textPaint = Paint()
-        textPaint.textSize = dp2px(16f).toFloat()
+        textPaint.textSize = dp2px(resources, 16f).toFloat()
         val textWidth = textPaint.measureText(content)
-        val maxContentViewWidth = (resources.displayMetrics.widthPixels - dp2px(74f)).toFloat()
+        val maxContentViewWidth =
+            (resources.displayMetrics.widthPixels - dp2px(resources, 74f)).toFloat()
         val maxLines = textWidth / maxContentViewWidth
         return maxLines > 4
     }
