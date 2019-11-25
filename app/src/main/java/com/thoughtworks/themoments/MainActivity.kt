@@ -105,10 +105,10 @@ class MainActivity : AppCompatActivity(), SwipeRefreshLayout.OnRefreshListener {
 
     fun calculateShowCheckAllText(content: String?): Boolean {
         val textPaint = Paint()
-        textPaint.textSize = dp2px(resources, 16f).toFloat()
+        textPaint.textSize = dp2px(16f).toFloat()
         val textWidth = textPaint.measureText(content)
         val maxContentViewWidth =
-            (resources.displayMetrics.widthPixels - dp2px(resources, 74f)).toFloat()
+            (getScreenWidth() - dp2px(74f)).toFloat()
         val maxLines = textWidth / maxContentViewWidth
         return maxLines > 4
     }

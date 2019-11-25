@@ -7,12 +7,13 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.thoughtworks.themoments.R
-import com.thoughtworks.themoments.bean.MomentsData
-import com.thoughtworks.themoments.bean.TYPE_MOMENTS_CONTENT
-import com.thoughtworks.themoments.bean.TYPE_MOMENTS_CONTENT_PIC
-import com.thoughtworks.themoments.bean.TYPE_MOMENTS_PIC
+import com.thoughtworks.themoments.bean.*
+import com.thoughtworks.themoments.widget.NineImageAdapter
 import kotlinx.android.synthetic.main.include_item_recycler_content.view.*
-import kotlinx.android.synthetic.main.item_recycler_moments_word.view.*
+import kotlinx.android.synthetic.main.item_recycler_moments_word.view.comments_view
+import kotlinx.android.synthetic.main.item_recycler_moments_word.view.img_avatar
+import kotlinx.android.synthetic.main.item_recycler_moments_word.view.txt_user_name
+import kotlinx.android.synthetic.main.item_recycler_moments_word_pic.view.*
 
 /**
  * Created by Zhu on 2019-11-22
@@ -23,7 +24,7 @@ class MomentsAdapter(var moments: MutableList<MomentsData> = arrayListOf()) :
         BaseHolder(
             LayoutInflater.from(container.context).inflate(
                 when (viewType) {
-                    TYPE_MOMENTS_CONTENT_PIC -> R.layout.item_recycler_moments_word
+                    TYPE_MOMENTS_CONTENT_PIC -> R.layout.item_recycler_moments_word_pic
                     TYPE_MOMENTS_CONTENT -> R.layout.item_recycler_moments_word
                     TYPE_MOMENTS_PIC -> R.layout.item_recycler_moments_word
                     else -> R.layout.item_recycler_moments_word
@@ -36,26 +37,25 @@ class MomentsAdapter(var moments: MutableList<MomentsData> = arrayListOf()) :
     override fun onBindViewHolder(holder: BaseHolder, position: Int) {
         val itemType = getItemViewType(position)
         val momentsData = moments[position]
+        if (momentsData.sender == null) {
+            return
+        }
 
         setCommonInfo(holder.itemView, momentsData)
 
         when (itemType) {
             TYPE_MOMENTS_CONTENT_PIC -> holder.itemView.let {
                 //                it.txt_user_name.text = moments[position].toString().subSequence(0, 3)
+                it.nine_grid_view.setAdapter(
+                    NineImageAdapter(
+                        it.context,
+                        momentsData.images!!
+                    )
+                )
             }
 
-
             TYPE_MOMENTS_CONTENT -> holder.itemView.let {
-                it.txt_user_name.text = momentsData.sender!!.nick
                 it.txt_content.text = momentsData.content
-                Glide.with(it.context)
-                    .asDrawable().load(momentsData.sender!!.avatar)
-                    .apply(
-                        RequestOptions.centerCropTransform()
-                            .skipMemoryCache(true)
-                            .placeholder(R.drawable.ic_launcher_background)
-                    )
-                    .into(it.img_avatar)
             }
 
 
@@ -72,6 +72,8 @@ class MomentsAdapter(var moments: MutableList<MomentsData> = arrayListOf()) :
     }
 
     private fun setCommonInfo(itemView: View, momentsData: MomentsData) {
+        setSenderInfo(itemView, momentsData.sender!!)
+
         setContentInfo(
             itemView,
             momentsData.content,
@@ -86,6 +88,19 @@ class MomentsAdapter(var moments: MutableList<MomentsData> = arrayListOf()) :
 
         itemView.comments_view.setComments(momentsData.comments)
 
+    }
+
+    private fun setSenderInfo(itemView: View, sender: SenderBean) {
+        itemView.txt_user_name.text = sender.nick
+
+        Glide.with(itemView.context)
+            .asDrawable().load(sender.avatar)
+            .apply(
+                RequestOptions.centerCropTransform()
+                    .skipMemoryCache(true)
+                    .placeholder(R.drawable.ic_launcher_foreground)
+            )
+            .into(itemView.img_avatar)
     }
 
     private fun setContentInfo(

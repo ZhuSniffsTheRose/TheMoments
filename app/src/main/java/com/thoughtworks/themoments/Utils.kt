@@ -6,10 +6,15 @@ import android.util.TypedValue
  * Created by Zhu on 2019-11-25
  */
 
-fun dp2px(resources: android.content.res.Resources, dpValue: Float): Int {
+fun dp2px(dpValue: Float): Int {
     return TypedValue.applyDimension(
         TypedValue.COMPLEX_UNIT_DIP,
         dpValue,
-        resources.displayMetrics
+        TheMomentsApp.sContenxt!!.resources.displayMetrics
     ).toInt()
+}
+
+
+fun getScreenWidth(): Int {
+    return TheMomentsApp.sContenxt!!.resources.displayMetrics.widthPixels
 }
