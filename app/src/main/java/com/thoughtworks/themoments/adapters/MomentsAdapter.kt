@@ -35,6 +35,9 @@ class MomentsAdapter(var moments: MutableList<MomentsData> = arrayListOf()) :
 
     override fun onBindViewHolder(holder: BaseHolder, position: Int) {
         val itemType = getItemViewType(position)
+        val momentsData = moments[position]
+
+        setCommonInfo(holder.itemView, momentsData)
 
         when (itemType) {
             TYPE_MOMENTS_CONTENT_PIC -> holder.itemView.let {
@@ -43,10 +46,10 @@ class MomentsAdapter(var moments: MutableList<MomentsData> = arrayListOf()) :
 
 
             TYPE_MOMENTS_CONTENT -> holder.itemView.let {
-                it.txt_user_name.text = moments[position].sender!!.nick
-                it.txt_content.text = moments[position].content
+                it.txt_user_name.text = momentsData.sender!!.nick
+                it.txt_content.text = momentsData.content
                 Glide.with(it.context)
-                    .asDrawable().load(moments[position].sender!!.avatar)
+                    .asDrawable().load(momentsData.sender!!.avatar)
                     .apply(
                         RequestOptions.centerCropTransform()
                             .skipMemoryCache(true)
@@ -66,6 +69,46 @@ class MomentsAdapter(var moments: MutableList<MomentsData> = arrayListOf()) :
 
         }
 
+    }
+
+    private fun setCommonInfo(itemView: View, momentsData: MomentsData) {
+        setContentInfo(
+            itemView,
+            momentsData.content,
+            momentsData.needShowAllSign,
+            momentsData.isExpand
+        )
+        itemView.txt_state.setOnClickListener {
+            momentsData.isExpand = !momentsData.isExpand
+            setTextState(itemView, momentsData.isExpand)
+        }
+    }
+
+    private fun setContentInfo(
+        itemView: View,
+        content: String?,
+        needShowAllSign: Boolean,
+        isExpand: Boolean
+    ) {
+        itemView.txt_content.text = content
+        itemView.txt_state.visibility = if (needShowAllSign) {
+            View.VISIBLE
+        } else {
+            View.GONE
+        }
+        if (needShowAllSign) {
+            setTextState(itemView, isExpand)
+        }
+    }
+
+    private fun setTextState(itemView: View, isExpand: Boolean) {
+        if (isExpand) {
+            itemView.txt_content.maxLines = Integer.MAX_VALUE
+            itemView.txt_state.text = "收起"
+        } else {
+            itemView.txt_content.maxLines = 4
+            itemView.txt_state.text = "全文"
+        }
     }
 
 

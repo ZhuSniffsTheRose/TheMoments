@@ -1,5 +1,6 @@
 package com.thoughtworks.themoments
 
+import android.graphics.Paint
 import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -13,6 +14,9 @@ import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_main.*
 
+/**
+ * Todo: 将非View层相关的代码整理至其他层， 比如数据请求及处理应在 Presenter 中.
+ */
 class MainActivity : AppCompatActivity() {
 
     private val mDisposableList = mutableListOf<Disposable>()
@@ -68,6 +72,10 @@ class MainActivity : AppCompatActivity() {
             if (viewType != TYPE_MOMENTS_INVALID) {
                 momentsDataFormatted.add(data)
             }
+
+            if (!data.content.isNullOrEmpty()) {
+                data.needShowAllSign = calculateShowCheckAllText(data.content)
+            }
         }
         return momentsDataFormatted
     }
@@ -80,5 +88,14 @@ class MainActivity : AppCompatActivity() {
     override fun onDestroy() {
         super.onDestroy()
         mDisposableList.forEach { action -> action.dispose() }
+    }
+
+    fun calculateShowCheckAllText(content: String?): Boolean {
+        val textPaint = Paint()
+        textPaint.textSize = dp2px(16f).toFloat()
+        val textWidth = textPaint.measureText(content)
+        val maxContentViewWidth = (resources.displayMetrics.widthPixels - dp2px(74f)).toFloat()
+        val maxLines = textWidth / maxContentViewWidth
+        return maxLines > 4
     }
 }

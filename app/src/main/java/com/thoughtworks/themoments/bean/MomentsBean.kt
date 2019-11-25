@@ -20,7 +20,10 @@ data class MomentsData(
     val sender: SenderBean?,
     @SerializedName("unknown error")
     val unknownError: String?,
-    var viewType: Int
+
+    var viewType: Int,
+    var isExpand: Boolean = false,
+    var needShowAllSign: Boolean = false
 )
 
 data class CommentBean(
