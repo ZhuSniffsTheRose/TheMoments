@@ -82,6 +82,10 @@ class MomentsAdapter(var moments: MutableList<MomentsData> = arrayListOf()) :
             momentsData.isExpand = !momentsData.isExpand
             setTextState(itemView, momentsData.isExpand)
         }
+
+
+        itemView.comments_view.setComments(momentsData.comments)
+
     }
 
     private fun setContentInfo(

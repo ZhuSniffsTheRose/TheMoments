@@ -13,10 +13,10 @@ const val TYPE_MOMENTS_CONTENT = 0xFF02
 const val TYPE_MOMENTS_PIC = 0xFF03
 
 data class MomentsData(
-    val comments: List<CommentBean>?,
+    val comments: MutableList<CommentBean>?,
     val content: String?,
     val error: String?,
-    val images: List<ImageBean>?,
+    val images: MutableList<ImageBean>?,
     val sender: SenderBean?,
     @SerializedName("unknown error")
     val unknownError: String?,
