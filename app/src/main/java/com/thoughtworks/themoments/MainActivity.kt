@@ -2,7 +2,7 @@ package com.thoughtworks.themoments
 
 import android.graphics.Paint
 import android.os.Bundle
-import android.widget.Toast
+import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
@@ -20,8 +20,10 @@ import kotlinx.android.synthetic.main.activity_main.*
  */
 class MainActivity : AppCompatActivity(), SwipeRefreshLayout.OnRefreshListener {
 
+    private val TAG = MainActivity::class.java.simpleName
+
     override fun onRefresh() {
-        requestMoments()
+        requestUserInfo()
     }
 
     private val mDisposableList = mutableListOf<Disposable>()
@@ -41,12 +43,12 @@ class MainActivity : AppCompatActivity(), SwipeRefreshLayout.OnRefreshListener {
 
     private fun requestMoments() {
         val onNext = { t: MutableList<MomentsData> ->
+            moments_recycler_view.adapter = mMomentsAdapter
             mMomentsAdapter.updateNewsList(formatData(t))
-            Toast.makeText(this, t.size, Toast.LENGTH_LONG).show()
         }
 
-        val onError = { exception: Throwable ->
-            Toast.makeText(this, exception.message, Toast.LENGTH_LONG).show()
+        val onError: (exception: Throwable) -> Unit = {
+            Log.e(TAG, "response of Moments onError ===> ${it.message}", it)
         }
 
         mDisposableList.add(
@@ -58,9 +60,28 @@ class MainActivity : AppCompatActivity(), SwipeRefreshLayout.OnRefreshListener {
         )
     }
 
+    private fun requestUserInfo() {
+        val onNext = { t: UserInfoBean ->
+            mMomentsAdapter.setHeaderUserInfo(t)
+            requestMoments()
+        }
+
+        val onError: (exception: Throwable) -> Unit = {
+            Log.e(TAG, "response of UserInfo onError ===> ${it.message}", it)
+        }
+
+        mDisposableList.add(
+            ApiManger.getApiService(MomentsApiInterface::class.java).fetchUserInfoBean()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(onNext, onError)
+        )
+    }
+
+
     private fun showOrHideSwipeRefreshLayout(show: Boolean) {
         if (show) {
-            requestMoments()
+            requestUserInfo()
         }
         swpie_refresh_layout.isRefreshing = show
     }

@@ -9,8 +9,10 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.thoughtworks.themoments.R
 import com.thoughtworks.themoments.bean.*
+import com.thoughtworks.themoments.loadOnlineImg
 import com.thoughtworks.themoments.widget.NineImageAdapter
 import kotlinx.android.synthetic.main.include_item_recycler_content.view.*
+import kotlinx.android.synthetic.main.item_recycler_header.view.*
 import kotlinx.android.synthetic.main.item_recycler_moments_word.view.comments_view
 import kotlinx.android.synthetic.main.item_recycler_moments_word.view.img_avatar
 import kotlinx.android.synthetic.main.item_recycler_moments_word.view.txt_user_name
@@ -22,7 +24,11 @@ import kotlinx.android.synthetic.main.item_recycler_moments_word_pic.view.*
 class MomentsAdapter(var moments: MutableList<MomentsData> = arrayListOf()) :
     RecyclerView.Adapter<BaseHolder>() {
 
-    val TAG = MomentsAdapter::class.java.simpleName
+    private val TAG = MomentsAdapter::class.java.simpleName
+
+    private val HEADER_SIZE = 1
+
+    private var mHeaderUserInfo: UserInfoBean? = null
 
     override fun onCreateViewHolder(container: ViewGroup, viewType: Int) =
         BaseHolder(
@@ -31,18 +37,41 @@ class MomentsAdapter(var moments: MutableList<MomentsData> = arrayListOf()) :
                     TYPE_MOMENTS_CONTENT_PIC -> R.layout.item_recycler_moments_word_pic
                     TYPE_MOMENTS_CONTENT -> R.layout.item_recycler_moments_word
                     TYPE_MOMENTS_PIC -> R.layout.item_recycler_moments_pic
-                    else -> R.layout.item_recycler_moments_word
+                    else -> R.layout.item_recycler_header
                 }, container, false
             )
         )
 
-    override fun getItemCount() = moments.size
+    override fun getItemCount() = moments.size + HEADER_SIZE
+
+    fun setHeaderUserInfo(info: UserInfoBean) {
+        mHeaderUserInfo = info
+    }
 
     override fun onBindViewHolder(holder: BaseHolder, position: Int) {
+        if (mHeaderUserInfo == null) {
+            return
+        }
+
         val itemType = getItemViewType(position)
-        val momentsData = moments[position]
+        if (itemType == TYPE_MOMENTS_HEADER) {
+            holder.itemView.profile_user_name.text = mHeaderUserInfo!!.nick
+            loadOnlineImg(
+                holder.itemView.context,
+                mHeaderUserInfo!!.profileImage,
+                holder.itemView.profile_bg_img
+            )
+            loadOnlineImg(
+                holder.itemView.context,
+                mHeaderUserInfo!!.avatar,
+                holder.itemView.profile_avatar_img
+            )
+            return
+        }
+
+        val momentsData = moments[position - HEADER_SIZE]
         if (momentsData.sender == null) {
-            Log.w(TAG, "sender is null")
+            Log.e(TAG, "sender in MomentsAdapter is null")
             return
         }
 
@@ -50,7 +79,6 @@ class MomentsAdapter(var moments: MutableList<MomentsData> = arrayListOf()) :
 
         when (itemType) {
             TYPE_MOMENTS_CONTENT_PIC -> holder.itemView.let {
-                //                it.txt_user_name.text = moments[position].toString().subSequence(0, 3)
                 it.nine_grid_view.setAdapter(
                     NineImageAdapter(
                         it.context,
@@ -94,10 +122,7 @@ class MomentsAdapter(var moments: MutableList<MomentsData> = arrayListOf()) :
                     )
                 )
             }
-            else -> holder.itemView.let {
-            }
         }
-
     }
 
     private fun setCommonInfo(itemView: View, momentsData: MomentsData) {
@@ -147,12 +172,16 @@ class MomentsAdapter(var moments: MutableList<MomentsData> = arrayListOf()) :
 
 
     override fun getItemViewType(position: Int): Int {
-        return moments[position].viewType
+        if (position == 0) {
+            return TYPE_MOMENTS_HEADER
+        }
+
+        return moments[position - HEADER_SIZE].viewType
     }
 
     fun updateNewsList(moments: MutableList<MomentsData>) {
         this.moments = moments
-        notifyItemRangeChanged(0, moments.size)
+        notifyItemRangeChanged(0, moments.size + HEADER_SIZE)
     }
 }
 
