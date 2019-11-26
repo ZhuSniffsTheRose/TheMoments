@@ -15,9 +15,6 @@ import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_main.*
 
-/**
- * Todo: 将非View层相关的代码整理至其他层， 比如数据请求及处理应在 Presenter 中.
- */
 class TheMomentsActivity : AppCompatActivity(), SwipeRefreshLayout.OnRefreshListener {
 
     private val TAG = TheMomentsActivity::class.java.simpleName
