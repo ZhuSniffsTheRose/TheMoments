@@ -15,6 +15,9 @@ import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_main.*
 
+/**
+ * 考虑本 HomeWork 功能和界面较为单一，就未采用当前主流的 mvp or mvvm 等架构，避免过度设计.
+ */
 class TheMomentsActivity : AppCompatActivity(), SwipeRefreshLayout.OnRefreshListener {
 
     private val TAG = TheMomentsActivity::class.java.simpleName
