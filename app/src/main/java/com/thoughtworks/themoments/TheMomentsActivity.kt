@@ -89,21 +89,8 @@ class TheMomentsActivity : AppCompatActivity(), SwipeRefreshLayout.OnRefreshList
     private fun formatData(t: MutableList<MomentsData>): MutableList<MomentsData> {
         val momentsDataFormatted = mutableListOf<MomentsData>()
         for (data in t) {
-            var viewType = TYPE_MOMENTS_INVALID
-
-            val isContentExist = data.content?.isNotEmpty() ?: false
-            val isImageExist = data.images?.isNotEmpty() ?: false
-
-            when {
-                isContentExist && !isImageExist -> viewType =
-                    TYPE_MOMENTS_CONTENT  // 仅展示文字
-                !isContentExist && isImageExist -> viewType =
-                    TYPE_MOMENTS_PIC  // 仅展示图片
-                isContentExist && isImageExist -> viewType =
-                    TYPE_MOMENTS_CONTENT_PIC // 文字和图片
-            }
-            data.viewType = viewType
-            if (viewType != TYPE_MOMENTS_INVALID) {
+            data.viewType = getViewType(data)
+            if (data.viewType  != TYPE_MOMENTS_INVALID) {
                 momentsDataFormatted.add(data)
             }
 
@@ -112,6 +99,22 @@ class TheMomentsActivity : AppCompatActivity(), SwipeRefreshLayout.OnRefreshList
             }
         }
         return momentsDataFormatted
+    }
+
+    private fun getViewType(data: MomentsData): Int {
+        var viewType = TYPE_MOMENTS_INVALID
+        val isContentExist = data.content?.isNotEmpty() ?: false
+        val isImageExist = data.images?.isNotEmpty() ?: false
+
+        when {
+            isContentExist && !isImageExist -> viewType =
+                TYPE_MOMENTS_CONTENT  // 仅展示文字
+            !isContentExist && isImageExist -> viewType =
+                TYPE_MOMENTS_PIC  // 仅展示图片
+            isContentExist && isImageExist -> viewType =
+                TYPE_MOMENTS_CONTENT_PIC // 文字和图片
+        }
+        return viewType
     }
 
     private fun initRv() {
