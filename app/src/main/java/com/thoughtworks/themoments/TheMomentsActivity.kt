@@ -18,9 +18,9 @@ import kotlinx.android.synthetic.main.activity_main.*
 /**
  * Todo: 将非View层相关的代码整理至其他层， 比如数据请求及处理应在 Presenter 中.
  */
-class MainActivity : AppCompatActivity(), SwipeRefreshLayout.OnRefreshListener {
+class TheMomentsActivity : AppCompatActivity(), SwipeRefreshLayout.OnRefreshListener {
 
-    private val TAG = MainActivity::class.java.simpleName
+    private val TAG = TheMomentsActivity::class.java.simpleName
 
     override fun onRefresh() {
         requestUserInfo()

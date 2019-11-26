@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:id="@+id/momens_root_view"
-    tools:context=".MainActivity">
+    tools:context=".TheMomentsActivity">
 
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
         android:id="@+id/swpie_refresh_layout"
