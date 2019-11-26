@@ -54,31 +54,31 @@ class MomentsAdapter(var moments: MutableList<MomentsData> = arrayListOf()) :
         }
 
         val itemType = getItemViewType(position)
-        if (itemType == TYPE_MOMENTS_HEADER) {
-            holder.itemView.profile_user_name.text = mHeaderUserInfo!!.nick
-            loadOnlineImg(
-                holder.itemView.context,
-                mHeaderUserInfo!!.profileImage,
-                holder.itemView.profile_bg_img
-            )
-            loadOnlineImg(
-                holder.itemView.context,
-                mHeaderUserInfo!!.avatar,
-                holder.itemView.profile_avatar_img
-            )
-            return
-        }
-
-        val momentsData = moments[position - HEADER_SIZE]
-        if (momentsData.sender == null) {
-            Log.e(TAG, "sender in MomentsAdapter is null")
-            return
-        }
-
-        setCommonInfo(holder.itemView, momentsData)
-
         when (itemType) {
+            TYPE_MOMENTS_HEADER -> holder.itemView.let {
+                it.profile_user_name.text = mHeaderUserInfo!!.nick
+
+                loadOnlineImg(
+                    it.context,
+                    mHeaderUserInfo!!.profileImage,
+                   it.profile_bg_img
+                )
+                loadOnlineImg(
+                    it.context,
+                    mHeaderUserInfo!!.avatar,
+                    it.profile_avatar_img
+                )
+            }
+
             TYPE_MOMENTS_CONTENT_PIC -> holder.itemView.let {
+                val momentsData = moments[position - HEADER_SIZE]
+                if (momentsData.sender == null) {
+                    Log.e(TAG, "sender in MomentsAdapter is null")
+                    return
+                }
+
+                setCommonInfo(it, momentsData)
+
                 it.nine_grid_view.setAdapter(
                     NineImageAdapter(
                         it.context,
@@ -99,7 +99,13 @@ class MomentsAdapter(var moments: MutableList<MomentsData> = arrayListOf()) :
             }
 
             TYPE_MOMENTS_CONTENT -> holder.itemView.let {
-                it.txt_content.text = momentsData.content
+                val momentsData = moments[position - HEADER_SIZE]
+                if (momentsData.sender == null) {
+                    Log.e(TAG, "sender in MomentsAdapter is null")
+                    return
+                }
+
+                setCommonInfo(it, momentsData)
 
                 setContentInfo(
                     it,
@@ -115,6 +121,14 @@ class MomentsAdapter(var moments: MutableList<MomentsData> = arrayListOf()) :
 
 
             TYPE_MOMENTS_PIC -> holder.itemView.let {
+                val momentsData = moments[position - HEADER_SIZE]
+                if (momentsData.sender == null) {
+                    Log.e(TAG, "sender in MomentsAdapter is null")
+                    return
+                }
+
+                setCommonInfo(it, momentsData)
+
                 it.nine_grid_view.setAdapter(
                     NineImageAdapter(
                         it.context,
