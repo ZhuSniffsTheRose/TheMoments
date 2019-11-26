@@ -50,8 +50,7 @@ class DataCenter {
         return viewType
     }
 
-
-    fun calculateShowCheckAllText(content: String?): Boolean {
+    private fun calculateShowCheckAllText(content: String?): Boolean {
         val textPaint = Paint()
         textPaint.textSize = dp2px(16f).toFloat()
         val textWidth = textPaint.measureText(content)

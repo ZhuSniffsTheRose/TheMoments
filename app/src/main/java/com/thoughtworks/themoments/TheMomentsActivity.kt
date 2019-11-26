@@ -4,7 +4,9 @@ import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+import com.bumptech.glide.Glide
 import com.thoughtworks.themoments.adapters.MomentsAdapter
 import com.thoughtworks.themoments.bean.MomentsData
 import com.thoughtworks.themoments.bean.UserInfoBean
@@ -97,6 +99,17 @@ class TheMomentsActivity : AppCompatActivity(), SwipeRefreshLayout.OnRefreshList
 
 
     private fun initRv() {
+        moments_recycler_view.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
+                super.onScrollStateChanged(recyclerView, newState)
+                if (newState == RecyclerView.SCROLL_STATE_IDLE) {
+                    Glide.with(this@TheMomentsActivity).resumeRequests()
+                } else {
+                    Glide.with(this@TheMomentsActivity).pauseRequests()
+                }
+            }
+        })
+
         moments_recycler_view.layoutManager = LinearLayoutManager(this)
         moments_recycler_view.adapter = mMomentsAdapter
     }
