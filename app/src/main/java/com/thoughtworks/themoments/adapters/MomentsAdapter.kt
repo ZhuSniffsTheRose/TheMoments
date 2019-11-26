@@ -1,5 +1,6 @@
 package com.thoughtworks.themoments.adapters
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -20,13 +21,16 @@ import kotlinx.android.synthetic.main.item_recycler_moments_word_pic.view.*
  */
 class MomentsAdapter(var moments: MutableList<MomentsData> = arrayListOf()) :
     RecyclerView.Adapter<BaseHolder>() {
+
+    val TAG = MomentsAdapter::class.java.simpleName
+
     override fun onCreateViewHolder(container: ViewGroup, viewType: Int) =
         BaseHolder(
             LayoutInflater.from(container.context).inflate(
                 when (viewType) {
                     TYPE_MOMENTS_CONTENT_PIC -> R.layout.item_recycler_moments_word_pic
                     TYPE_MOMENTS_CONTENT -> R.layout.item_recycler_moments_word
-                    TYPE_MOMENTS_PIC -> R.layout.item_recycler_moments_word
+                    TYPE_MOMENTS_PIC -> R.layout.item_recycler_moments_pic
                     else -> R.layout.item_recycler_moments_word
                 }, container, false
             )
@@ -38,6 +42,7 @@ class MomentsAdapter(var moments: MutableList<MomentsData> = arrayListOf()) :
         val itemType = getItemViewType(position)
         val momentsData = moments[position]
         if (momentsData.sender == null) {
+            Log.w(TAG, "sender is null")
             return
         }
 
@@ -52,42 +57,52 @@ class MomentsAdapter(var moments: MutableList<MomentsData> = arrayListOf()) :
                         momentsData.images!!
                     )
                 )
+
+                setContentInfo(
+                    it,
+                    momentsData.content,
+                    momentsData.needShowAllSign,
+                    momentsData.isExpand
+                )
+                holder.itemView.txt_state.setOnClickListener {
+                    momentsData.isExpand = !momentsData.isExpand
+                    setTextState(it, momentsData.isExpand)
+                }
             }
 
             TYPE_MOMENTS_CONTENT -> holder.itemView.let {
                 it.txt_content.text = momentsData.content
+
+                setContentInfo(
+                    it,
+                    momentsData.content,
+                    momentsData.needShowAllSign,
+                    momentsData.isExpand
+                )
+                it.txt_state.setOnClickListener {
+                    momentsData.isExpand = !momentsData.isExpand
+                    setTextState(it, momentsData.isExpand)
+                }
             }
 
 
             TYPE_MOMENTS_PIC -> holder.itemView.let {
-                //                it.item_name.text = moments[position].toString().subSequence(0, 3)
+                it.nine_grid_view.setAdapter(
+                    NineImageAdapter(
+                        it.context,
+                        momentsData.images!!
+                    )
+                )
             }
-
             else -> holder.itemView.let {
-                //                it.item_name.text = moments[position].toString().subSequence(0, 3)
             }
-
         }
 
     }
 
     private fun setCommonInfo(itemView: View, momentsData: MomentsData) {
         setSenderInfo(itemView, momentsData.sender!!)
-
-        setContentInfo(
-            itemView,
-            momentsData.content,
-            momentsData.needShowAllSign,
-            momentsData.isExpand
-        )
-        itemView.txt_state.setOnClickListener {
-            momentsData.isExpand = !momentsData.isExpand
-            setTextState(itemView, momentsData.isExpand)
-        }
-
-
         itemView.comments_view.setComments(momentsData.comments)
-
     }
 
     private fun setSenderInfo(itemView: View, sender: SenderBean) {
