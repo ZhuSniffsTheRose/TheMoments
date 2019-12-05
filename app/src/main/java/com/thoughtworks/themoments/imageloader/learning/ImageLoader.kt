@@ -31,20 +31,28 @@ class ImageLoader {
             imageView.setImageBitmap(bitmap)
             return
         } else {
-            mExcutor.submit {
-                bitmap = dowloadBitmap(url)
-                if (bitmap == null) {
-                    return@submit
-                }
-
-                if (imageView.tag == url) {
-                    imageView.setImageBitmap(bitmap)
-                }
-
-                mCache.put(bitmap!!,url)
-            }
+            submitLoadRequst(url, imageView)
         }
 
+    }
+
+    private fun submitLoadRequst(
+        url: String,
+        imageView: ImageView
+    ) {
+        var bitmap: Bitmap?
+        mExcutor.submit {
+            bitmap = dowloadBitmap(url)
+            if (bitmap == null) {
+                return@submit
+            }
+
+            if (imageView.tag == url) {
+                imageView.setImageBitmap(bitmap)
+            }
+
+            mCache.put(bitmap!!, url)
+        }
     }
 
 
