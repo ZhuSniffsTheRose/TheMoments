@@ -6,7 +6,7 @@ import android.graphics.Bitmap
  * Created by Zhu on 2019-12-05
  */
 class DiskCache : ImageCache {
-    override fun put(bitmap: Bitmap) {
+    override fun put(bitmap: Bitmap, url: String) {
 
     }
 

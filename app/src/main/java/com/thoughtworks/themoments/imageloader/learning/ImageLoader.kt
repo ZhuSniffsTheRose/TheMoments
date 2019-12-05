@@ -41,7 +41,7 @@ class ImageLoader {
                     imageView.setImageBitmap(bitmap)
                 }
 
-                mCache.put(bitmap!!)
+                mCache.put(bitmap!!,)
             }
         }
 
