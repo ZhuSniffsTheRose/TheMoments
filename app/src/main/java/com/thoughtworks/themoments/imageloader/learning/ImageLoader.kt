@@ -27,7 +27,10 @@ class ImageLoader {
         imageView.tag = url
 
         var bitmap = mCache.get(url)
-        if (bitmap == null) {
+        if (bitmap != null) {
+            imageView.setImageBitmap(bitmap)
+            return
+        } else {
             mExcutor.submit {
                 bitmap = dowloadBitmap(url)
                 if (bitmap == null) {
