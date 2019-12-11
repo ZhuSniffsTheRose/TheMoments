@@ -13,7 +13,5 @@ public class Tenant {
         if (room != null) {
             System.out.println("rent success ");
         }
-
     }
-
 }
