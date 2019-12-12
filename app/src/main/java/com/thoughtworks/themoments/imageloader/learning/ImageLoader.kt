@@ -18,15 +18,20 @@ class ImageLoader {
 
     lateinit var mCache: ImageCache
 
+    var mLoadingImageId = 0
+
+    var mLoadingFailedImageId = 0
+
+    val mExcutor = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors())
+
+
     fun setImageCache(cache: ImageCache) {
         mCache = cache
     }
 
 
     fun displayImage(url: String, imageView: ImageView) {
-        imageView.tag = url
-
-        var bitmap = mCache.get(url)
+        val bitmap = mCache.get(url)
         if (bitmap != null) {
             imageView.setImageBitmap(bitmap)
             return
@@ -36,27 +41,28 @@ class ImageLoader {
 
     }
 
+
     private fun submitLoadRequst(
         url: String,
         imageView: ImageView
     ) {
-        var bitmap: Bitmap?
+        imageView.setImageResource(mLoadingImageId)
+        imageView.tag = url
         mExcutor.submit {
-            bitmap = dowloadBitmap(url)
+            val bitmap = dowloadBitmap(url)
             if (bitmap == null) {
+                imageView.setImageResource(mLoadingFailedImageId)
                 return@submit
             }
 
             if (imageView.tag == url) {
                 imageView.setImageBitmap(bitmap)
             }
-
-            mCache.put(bitmap!!, url)
+            mCache.put(bitmap, url)
         }
     }
 
 
-    val mExcutor = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors())
     fun dowloadBitmap(url: String): Bitmap? {
         var bitmap: Bitmap? = null
         var `is`: InputStream? = null
@@ -85,5 +91,13 @@ class ImageLoader {
             `is`?.close()
         }
         return bitmap
+    }
+
+    fun setLoadingImage(imageId: Int) {
+        mLoadingImageId = imageId
+    }
+
+    fun setLoadingFailedImage(imageId: Int) {
+        mLoadingFailedImageId = imageId
     }
 }
