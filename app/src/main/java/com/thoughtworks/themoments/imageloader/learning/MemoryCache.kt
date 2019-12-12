@@ -6,7 +6,7 @@ import androidx.collection.LruCache
 /**
  * Created by Zhu on 2019-12-05
  */
-class MemoryCache : ImageCache() {
+class MemoryCache : ImageCache {
 
     val mLruCache = LruCache<String, Bitmap>((Runtime.getRuntime().maxMemory() / 1024).toInt() / 4)
 

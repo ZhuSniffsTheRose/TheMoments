@@ -5,9 +5,9 @@ import android.graphics.Bitmap
 /**
  * Created by Zhu on 2019-12-05
  */
-abstract class ImageCache {
-    abstract fun put(bitmap: Bitmap, url: String)
+interface ImageCache {
+    fun put(bitmap: Bitmap, url: String)
 
-    abstract fun get(url: String): Bitmap?
+    fun get(url: String): Bitmap?
 
 }
