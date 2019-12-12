@@ -22,6 +22,11 @@ class ImageLoadeConfig private constructor() {
             return this
         }
 
+        fun setCache(cache: ImageCache): Builder {
+            mBitmapCache = cache
+            return this
+        }
+
         fun setLoadingImage(imageId: Int): Builder {
             mDiskCache.mLoadingImageId = imageId
             return this

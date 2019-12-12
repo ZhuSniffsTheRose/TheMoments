@@ -1,6 +1,7 @@
 package com.thoughtworks.themoments.imageloader.learning
 
 import com.thoughtworks.themoments.R
+import com.thoughtworks.themoments.imageloader.CacheFactor
 
 /**
  * Created by Zhu on 2019-12-12
@@ -10,6 +11,8 @@ import com.thoughtworks.themoments.R
 class LoaderTest {
 
     fun test() {
+
+
         var config = ImageLoadeConfig.Builder()
             .setLoadingFailedImage(R.drawable.ic_launcher_foreground)
             .setLoadingImage(R.drawable.ic_launcher_background)
@@ -17,5 +20,8 @@ class LoaderTest {
             .create()
 
         val imageLoader = ImageLoader(config)
+
+        CacheFactor.getCache(MemoryCache::class.java)
+
     }
 }

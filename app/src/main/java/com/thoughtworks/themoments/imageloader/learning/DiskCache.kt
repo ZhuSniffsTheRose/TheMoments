@@ -11,7 +11,7 @@ import java.io.FileOutputStream
  *  但是 Android 应用的内存有限，且具有易失性，即当应用重新启动，原来已经加载过的图片将会丢失
  *  所以引入 本地缓存
  */
-class DiskCache : ImageCache {
+class DiskCache : ImageCache() {
 
     companion object {
         const val cacheDir = "sdcard/cache/"
