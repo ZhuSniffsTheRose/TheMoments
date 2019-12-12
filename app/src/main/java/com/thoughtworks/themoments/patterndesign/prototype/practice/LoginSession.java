@@ -2,7 +2,7 @@ package com.thoughtworks.themoments.patterndesign.prototype.practice;
 
 /**
  * Created by Zhu on 2019-12-12
- *
+ * 我们可以通过 getsLoginSession().getLoginedUser().address = new Address(...)修改 user 信息.
  */
 public class LoginSession {
     static LoginSession sLoginSession = null;
@@ -22,7 +22,7 @@ public class LoginSession {
         loginedUser = user;
     }
 
-    public User getLoginedUser() {
-        return loginedUser;
+    public User getLoginedUser() throws CloneNotSupportedException {
+        return loginedUser.clone();
     }
 }
