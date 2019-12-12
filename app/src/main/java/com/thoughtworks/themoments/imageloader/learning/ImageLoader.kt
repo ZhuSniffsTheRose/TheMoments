@@ -9,29 +9,29 @@ import java.net.HttpURLConnection
 import java.net.MalformedURLException
 import java.net.ProtocolException
 import java.net.URL
+import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
 
 /**
  * Created by Zhu on 2019-12-05
  */
-class ImageLoader {
-
-    lateinit var mCache: ImageCache
-
-    var mLoadingImageId = 0
-
-    var mLoadingFailedImageId = 0
-
-    var mExcutor = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors())
+class ImageLoader(val mConfig: ImageLoadeConfig) {
 
 
-    fun setImageCache(cache: ImageCache) {
-        mCache = cache
+    var mExcutor: ExecutorService
+
+    init {
+        // 可以check 一下参数  比如 checkConfig
+        checkConfig()
+        mExcutor = Executors.newFixedThreadPool(mConfig.mThreadCount)
     }
 
+    private fun checkConfig() {
+
+    }
 
     fun displayImage(url: String, imageView: ImageView) {
-        val bitmap = mCache.get(url)
+        val bitmap = mConfig.mBitmapCache.get(url)
         if (bitmap != null) {
             imageView.setImageBitmap(bitmap)
             return
@@ -46,19 +46,19 @@ class ImageLoader {
         url: String,
         imageView: ImageView
     ) {
-        imageView.setImageResource(mLoadingImageId)
+        imageView.setImageResource(mConfig.mDisplayConfig.mLoadingImageId)
         imageView.tag = url
         mExcutor.submit {
             val bitmap = dowloadBitmap(url)
             if (bitmap == null) {
-                imageView.setImageResource(mLoadingFailedImageId)
+                imageView.setImageResource(mConfig.mDisplayConfig.mLoadingFailedImageId)
                 return@submit
             }
 
             if (imageView.tag == url) {
                 imageView.setImageBitmap(bitmap)
             }
-            mCache.put(bitmap, url)
+            mConfig.mBitmapCache.put(bitmap, url)
         }
     }
 
@@ -91,19 +91,5 @@ class ImageLoader {
             `is`?.close()
         }
         return bitmap
-    }
-
-    fun setLoadingImage(imageId: Int) {
-        mLoadingImageId = imageId
-    }
-
-    fun setLoadingFailedImage(imageId: Int) {
-        mLoadingFailedImageId = imageId
-    }
-
-    fun setTHreadCount(count: Int) {
-        mExcutor.shutdown()
-        mExcutor = null
-        mExcutor = Executors.newFixedThreadPool(count)
     }
 }
