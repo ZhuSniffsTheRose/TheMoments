@@ -22,7 +22,7 @@ class ImageLoader {
 
     var mLoadingFailedImageId = 0
 
-    val mExcutor = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors())
+    var mExcutor = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors())
 
 
     fun setImageCache(cache: ImageCache) {
@@ -99,5 +99,11 @@ class ImageLoader {
 
     fun setLoadingFailedImage(imageId: Int) {
         mLoadingFailedImageId = imageId
+    }
+
+    fun setTHreadCount(count: Int) {
+        mExcutor.shutdown()
+        mExcutor = null
+        mExcutor = Executors.newFixedThreadPool(count)
     }
 }
