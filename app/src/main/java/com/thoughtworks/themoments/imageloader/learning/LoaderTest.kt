@@ -17,11 +17,11 @@ class LoaderTest {
             .setLoadingFailedImage(R.drawable.ic_launcher_foreground)
             .setLoadingImage(R.drawable.ic_launcher_background)
             .setThreadCount(3)
+            .setCache(CacheFactor.getCache(MemoryCache::class.java))
             .create()
 
         val imageLoader = ImageLoader(config)
 
-        CacheFactor.getCache(MemoryCache::class.java)
 
     }
 }
