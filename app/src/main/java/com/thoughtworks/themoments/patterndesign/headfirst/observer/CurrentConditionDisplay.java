@@ -24,6 +24,12 @@ public class CurrentConditionDisplay implements Observer, DisplayElement {
         System.out.println("show data" + temperature + "  " + humidity + "  " + pressure);
     }
 
+    /**
+     * 这三个参数，是observable将其所有状态推过来，不一定是observer都需要的, 所以应该提供需要啥，给啥===>即 observer去拉取.
+     * @param temp
+     * @param humidity
+     * @param pressure
+     */
     @Override
     public void update(float temp, float humidity, float pressure) {
         this.temperature = temp;
