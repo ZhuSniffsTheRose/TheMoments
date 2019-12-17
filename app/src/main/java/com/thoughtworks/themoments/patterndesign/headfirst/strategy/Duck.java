@@ -18,4 +18,7 @@ public abstract class Duck {
         System.out.println("swim");
     }
 
+    void fly() {
+        System.out.println("鸭子飞起来");
+    }
 }
