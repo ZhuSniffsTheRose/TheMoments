@@ -1,4 +1,4 @@
-package com.thoughtworks.themoments.patterndesign.headfirst.strategy;
+package com.thoughtworks.themoments.patterndesign.headfirst;
 
 /**
  * Created by Zhu on 2019-12-17

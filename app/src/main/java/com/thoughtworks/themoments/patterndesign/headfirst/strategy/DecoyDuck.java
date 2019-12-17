@@ -6,6 +6,6 @@ package com.thoughtworks.themoments.patterndesign.headfirst.strategy;
 public class DecoyDuck extends Duck {
     @Override
     void display() {
-
+        System.out.println("DecoyDuck display");
     }
 }
