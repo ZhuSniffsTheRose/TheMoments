@@ -59,6 +59,11 @@ public class WeatherData implements Subject {
     }
 
     @Override
+    public void registerBetterObserver(CurrentConditionDisplay.TheObserver observer) {
+        observer.update(getTemperature(), getHumidity(), getPressure());
+    }
+
+    @Override
     public void unregisterObserver(Observer observer) {
         int i = observers.indexOf(observer);
         if (i > 0) {

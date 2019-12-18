@@ -7,6 +7,8 @@ public interface Subject {
 
     void registerObserver(Observer observer);
 
+    void registerBetterObserver(CurrentConditionDisplay.TheObserver observer);
+
     void unregisterObserver(Observer observer);
 
     void notifyObservers();
