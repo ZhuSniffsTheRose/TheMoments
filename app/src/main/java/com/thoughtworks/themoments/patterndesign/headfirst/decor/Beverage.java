@@ -2,18 +2,15 @@ package com.thoughtworks.themoments.patterndesign.headfirst.decor;
 
 /**
  * Created by Zhu on 2019-12-18
+ *
+ * 抽象组件
  */
 public abstract class Beverage {
-    /**
-     * 描述每个子类
-     */
-    private String description;
+    String description = "Unknown Beverage";
 
-    abstract String getDescription();
+    public String getDescription() {
+        return description;
+    }
 
-    /**
-     * 每个子类都有不同的价格
-     * @return
-     */
-    abstract int cost();
+    public abstract double cost();
 }
