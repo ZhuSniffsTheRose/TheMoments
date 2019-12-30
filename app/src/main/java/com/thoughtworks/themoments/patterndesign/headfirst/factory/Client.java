@@ -10,13 +10,13 @@ public class Client {
     public static void main(String[] args) {
         // 制造纽约风味的Pizza
         NYPizzaFactory nyPizzaFactory = new NYPizzaFactory();
-        PizzaStore pizzaStore = new PizzaStore(nyPizzaFactory);
-        pizzaStore.orderPizza("chesse");
-
-        // 制造普通pizza
-        SimplePizzaFactory simplePizzaFactory = new SimplePizzaFactory();
-        PizzaStore pizzaStore1 = new PizzaStore(simplePizzaFactory);
-        pizzaStore1.orderPizza("cheese");
+//        PizzaStore pizzaStore = new PizzaStore(nyPizzaFactory);
+//        pizzaStore.orderPizza("chesse");
+//
+//        // 制造普通pizza
+//        SimplePizzaFactory simplePizzaFactory = new SimplePizzaFactory();
+//        PizzaStore pizzaStore1 = new PizzaStore(simplePizzaFactory);
+//        pizzaStore1.orderPizza("cheese");
 
     }
 }
