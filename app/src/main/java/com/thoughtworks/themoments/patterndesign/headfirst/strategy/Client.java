@@ -1,6 +1,4 @@
-package com.thoughtworks.themoments.patterndesign.headfirst;
-
-import com.thoughtworks.themoments.patterndesign.headfirst.strategy.MallarDuck;
+package com.thoughtworks.themoments.patterndesign.headfirst.strategy;
 
 /**
  * Created by Zhu on 2019-12-17
